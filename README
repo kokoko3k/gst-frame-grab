@@ -1,0 +1,21 @@
+When using screen grasbbers to drive my leds, i've stuttering on the screen if the gpu is under
+heavy load.
+
+Since driving leds does not require the full screen capture, this script come to help by capturing 
+only part of the screen, the frame of the screen.
+It is intended to feed hypergrabgb, which in turn feeds hyperiond.
+It is way lighter on resources than full screen grab.
+Apart of the advantage of grabbing less, and so less stress for Xorg, the other Pro is that it grab screen in "slices"
+and from my experience, this allow the gpu heavy app (the game!) to render between a slice grab and the other.
+Sure, in that case the slices are not synchronized, but you cannot really tell by watching the leds., so it is Ok.
+
+USE:
+  gstgrab.sh start_x start_y in_width in_height fps border_size out_width out_height preview(=1|0)
+
+Use gstgrab.sh standalonde with:
+  gstgrab.sh 0 0 1920 1080 20 200 16 9 1
+...having the last parameter (preview) =1 will open a window with the live capture so that you can tune it.
+
+Done that, feed it to hypergrabgb that way:
+  hypergrabgb.gambas -e 16 -d 9 -q -z "/koko/tmp/gst.sh 0 0 1920 1080 20 200 16 9 0"
+  (see that -e 16 -d 9 have to match out_width and out_height of gstgrab.sh)
